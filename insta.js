@@ -58,7 +58,8 @@ function load(){
           return ;
         }else{
           return response.json().then(function(data) {
-            document.title = `${data.graphql.shortcode_media.owner.full_name} on Instagram : "${data.graphql.shortcode_media.edge_media_to_caption.edges[0].node.text.trunc(140,true)}"`;
+            var caption = data.graphql.shortcode_media.edge_media_to_caption.edges[0] ? data.graphql.shortcode_media.edge_media_to_caption.edges[0].node.text.trunc(140,true) : "";
+            document.title = `${data.graphql.shortcode_media.owner.full_name} on Instagram : "${caption}"`;
   			  	document.getElementById('name').innerText = data.graphql.shortcode_media.owner.full_name;
   			  	document.getElementById('btntext').innerText = `@${data.graphql.shortcode_media.owner.username}`;
             bgurl = data.graphql.shortcode_media.display_url;
@@ -71,7 +72,7 @@ function load(){
   			  	document.getElementById('t3').innerText = "comments";
             document.getElementById('i2').style.display = data.graphql.shortcode_media.is_video ? "flex" : "none";
             bgurl = data.graphql.shortcode_media.is_video ? data.graphql.shortcode_media.video_url : bgurl;
-            document.getElementById('bio').innerText = data.graphql.shortcode_media.edge_media_to_caption.edges[0].node.text.trunc(140,true);
+            document.getElementById('bio').innerText = caption;
             document.getElementById('ico').style.visibility = data.graphql.shortcode_media.is_video ? "visible" : "hidden";
           });
         }
