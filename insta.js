@@ -1,4 +1,6 @@
 var bgurl = "";
+var isb = false;
+var tourl = "";
 String.prototype.trunc =
      function( n, useWordBoundary ){
          if (this.length <= n) { return this; }
@@ -40,7 +42,7 @@ function numberWithCommas(x) {
     return parts.join(".");
 }
 document.getElementById('button').addEventListener('click', (e)=>{
-	window.open(`https://instagram.com/${location.hash.substring(3) ? location.hash.substring(3) : ""}`,'_top');
+	window.open(isb ? (tourl.length != 0 ? tourl : location.origin) : `https://instagram.com/${location.hash.substring(3) ? location.hash.substring(3) : ""}`,'_top');
 });
 document.getElementById('photo').addEventListener('click', (e)=>{
 	if(e.target == document.getElementById('photo')){
@@ -50,8 +52,44 @@ document.getElementById('photo').addEventListener('click', (e)=>{
 function load(){
 	if((location.hash.startsWith('#!'))&&(location.hash.length > 3)){
 		var hash = location.hash.substring(3).split('/');
+	isb = (hash[0] == "b");
+	tourl = "";
+    document.body.style.background = "var(--bg)";
+    document.getElementById('button').style.backgroundColor = '#e6196a';
+    document.getElementById('button').style.color = '#ffffff';
     document.getElementById('ico').style.visibility = "hidden";
-		if(hash[0] == "p"){
+    if((hash[0] == "b")&&(hash.length > 10)){
+        document.title = decodeURIComponent(hash[3]);
+        document.getElementById('bio').innerText = decodeURIComponent(hash[4]);
+        document.getElementById('name').innerText = decodeURIComponent(hash[2]);
+        document.getElementById('btntext').innerText = decodeURIComponent(hash[1]);
+        bgurl = decodeURIComponent(hash[6]);
+        document.getElementById('photo').style.setProperty('--url',`url(${bgurl})`);
+        var cis = hash[5].split('|');
+        if((cis.length == 2)||(cis.length == 3)){
+          var l = cis[0].split(':');
+          document.getElementById('t1').innerText = decodeURIComponent(l[0]);
+          document.getElementById('c1').innerText = decodeURIComponent(l[1]);
+          l = cis.length == 3 ? cis[1].split(':') : ['',''];
+          document.getElementById('t2').innerText = decodeURIComponent(l[0]);
+          document.getElementById('c2').innerText = decodeURIComponent(l[1]);
+          document.getElementById('i2').style.display = cis.length == 3 ? "flex" : "none";
+          l = cis[cis.length - 1].split(':');
+          document.getElementById('t3').innerText = decodeURIComponent(l[0]);
+          document.getElementById('c3').innerText = decodeURIComponent(l[1]);
+        }
+      document.getElementById('ico').style.visibility = hash[7] == 'v' ? "visible" : "hidden";
+      document.body.style.background = decodeURIComponent(hash[8].length != 0 ? hash[8] : "var(--bg)");
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundRepeat = "no-repeat";
+      document.body.style.backgroundPosition = "center";
+      var bgs = hash[9].split('|');
+      if(bgs.length == 2){
+        document.getElementById('button').style.backgroundColor = bgs[0];
+        document.getElementById('button').style.color = bgs[1];
+      }
+      tourl = decodeURIComponent(hash[10].startsWith("http") ? hash[10] : location.origin);
+    }else if(hash[0] == "p"){
       fetch(`https://www.instagram.com/p/${hash[1]}/?__a=1`)
 			.then(function(response) {
         if (response.status !== 200) {
