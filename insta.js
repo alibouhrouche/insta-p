@@ -150,7 +150,7 @@ function load(){
     document.getElementById('t3').innerText =
     document.getElementById('name').innerText =
     document.getElementById('btntext').innerText = "";
-    document.getElementById('bio').innerText = "Replace https://instagram.com/ with https://ali.js.org/insta-p/#!/";
+    document.getElementById('bio').innerText = "Replace https://instagram.com/ with https://alibouhrouche.github.io/insta-p/#!/";
   }
 }
 
